@@ -1,7 +1,9 @@
 package Client;
 
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import org.apache.commons.validator.routines.InetAddressValidator;
 
 /**
@@ -109,21 +111,27 @@ public class ConnectToServer extends javax.swing.JFrame {
 
     private void ConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConnectActionPerformed
         // TODO add your handling code here:
-        String ip;
+        String ipString;
         int port;
-        ip = IP.getText();
+        ipString = IP.getText();
         port = Integer.parseInt(Port.getText());
-        ServerInfo serverInfo = new ServerInfo(ip, port);
-        if (new InetAddressValidator().isValid(serverInfo.getIp())) {
-            try {
-                DatagramSocket socket = new DatagramSocket(serverInfo.getPort());
-                Client client=new Client(socket,serverInfo);
-                System.out.println("Success In Socket Creation");
-            } catch (SocketException ex) {
-                System.out.println("Cannot Create Socket,Please Try Again");
+        InetAddress ip;
+        try {
+            ip = InetAddress.getByName(ipString);
+            if (new InetAddressValidator().isValid(ipString)) {
+                try {
+                    ServerInfo serverInfo = new ServerInfo(ip, port);
+                    DatagramSocket socket = new DatagramSocket(port);
+                    Client client = new Client(socket, serverInfo);
+                    System.out.println("Success In Socket Creation");
+                } catch (SocketException ex) {
+                    System.out.println("Cannot Create Socket,Please Try Again");
+                }
+            } else {
+                System.out.println("Please Provide A Valid IP Address");
             }
-        } else {
-            System.out.println("Please Provide A Valid IP Address");
+        } catch (UnknownHostException ex) {
+            System.out.println("Provide A Valid IP Address");
         }
     }//GEN-LAST:event_ConnectActionPerformed
 
