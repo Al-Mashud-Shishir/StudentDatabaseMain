@@ -4,6 +4,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import javax.swing.WindowConstants;
 import org.apache.commons.validator.routines.InetAddressValidator;
 
 /**
@@ -16,6 +17,8 @@ private String ENDINDEX = "//INFO_END//";
      */
     public ConnectToServer() {
         initComponents();
+                        setTitle("Connecting To Server");
+
     }
 
     @SuppressWarnings("unchecked")
@@ -126,22 +129,22 @@ private String ENDINDEX = "//INFO_END//";
                     //if port is passed here a new socket will try to run at the
                     //same port where server is already running,so its not possible and 
                     //we also shouldn't put port as argument of socket here
-                    Client client = new Client(socket, serverInfo);
-                    System.out.println("Success In Socket Creation");
-                    String msg = "hello Server";
-                    System.out.println("To Server: " + msg);
-                    msg = "/c/" + msg+ENDINDEX;
-                    client.SendPacket(msg.getBytes());
+                    ClientManager cm=new ClientManager(socket, serverInfo);
+                    System.out.println("Client: Success In Socket Creation");
+                    cm.ConnectionMessageToServer();
                     dispose();
-                    new LoginToServer(client).setVisible(true);
+                    LoginToServer ls=new LoginToServer(cm);
+                    ls.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+                    ls.setVisible(true);
+                    
                 } catch (SocketException ex) {
-                    System.out.println("Cannot Create Socket,Please Try Again");
+                    System.out.println("Client: Cannot Create Socket,Please Try Again");
                 }
             } else {
-                System.out.println("Please Provide A Valid IP Address");
+                System.out.println("SERVER: Please Provide A Valid IP Address");
             }
         } catch (UnknownHostException ex) {
-            System.out.println("Provide A Valid IP Address");
+            System.out.println("SERVER: Provide A Valid IP Address");
         }
     }//GEN-LAST:event_ConnectActionPerformed
 

@@ -5,12 +5,15 @@ package Client;
  * created at : Dec 11, 2016
  */
 public class ClientActivity extends javax.swing.JFrame {
-    private Client clienT;
         private String ENDINDEX = "//INFO_END//";
     /** Creates new form ClientActivity */
-    public ClientActivity() {
-        initComponents();
-       //   clienT=new Client(client.socket,client.serverInfo);
+   private ClientManager clientManager;
+    /** Creates new form LoginToServer */
+    public ClientActivity(ClientManager clientManager) {
+                initComponents();
+                                setTitle("Client Activity");
+
+        this.clientManager=new ClientManager(clientManager.socket,clientManager.serverInfo);
     }
 
     @SuppressWarnings("unchecked")
@@ -137,16 +140,23 @@ public class ClientActivity extends javax.swing.JFrame {
 
     private void getInfoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getInfoBtnActionPerformed
         // TODO add your handling code here:
+        
         int Id;
         String IdString;
         Id=Integer.parseInt(InfoID.getText());
         
         IdString="/Info/"+Id+ENDINDEX;
-        clienT.SendPacket(IdString.getBytes());
+        clientManager.SendPacket(IdString.getBytes());
     }//GEN-LAST:event_getInfoBtnActionPerformed
 
     private void InsertbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InsertbtnActionPerformed
-        // TODO add your handling code here:
+        String IdString;
+        int id=Integer.parseInt(InsertID.getText());
+        String sname=name.getText();
+        String sdept=dept.getText();
+        String sSem=sems.getText();
+        String Insert="/Insert/"+id+","+sname+","+sdept+","+sSem+ENDINDEX;
+        clientManager.SendPacket(Insert.getBytes());
     }//GEN-LAST:event_InsertbtnActionPerformed
 
 //
